@@ -10,6 +10,7 @@ from requests import get
 from requests.exceptions import RequestException
 from contextlib import closing
 from bs4 import BeautifulSoup
+import matplotlib.pyplot as plt
 
 TARGET_URL = "https://www.imdb.com/search/title?title_type=feature&release_date=2008-01-01,2018-01-01&num_votes=5000,&sort=user_rating,desc"
 BACKUP_HTML = 'movies.html'
@@ -28,35 +29,50 @@ def extract_movies(dom):
     """
 
     dom.encode("utf-8")
+    allinfo = []
 
     for title in dom.findAll("div", {"class": "lister-item mode-advanced"}):
-        title.encode("utf-8")
-        print(title.h3.a.text)
-        for score in title.findAll("span", {"class": "value"}):
-            print(score.text)
+        infolist = []
+        infolist.append(title.h3.a.text)
+        for rating in title.findAll("span", {"class": "value"}):
+            infolist.append(float(rating.text))
         for year in title.findAll("span", {"class": "lister-item-year text-muted unbold"}):
-            print(year.text)
+            year = year.text
+            year = year.replace('(', '').replace(')', '').replace('II', '')\
+                        .replace('I', '')
+            year = int(year)
+            infolist.append(year)
         for actors in title.select('a[href*=_st]'):
-            print(f"{actors.text},")
-        for time in title.findAll("span", {"class": "runtime"}):
-            print(time.text)
-#main > div > div.lister.list.detail.sub-list > div > div:nth-child(2) > div.lister-item-content > h3 > span.lister-item-year.text-muted.unbold
+            infolist.append(actors.text)
+        for runtime in title.findAll("span", {"class": "runtime"}):
+            infolist.append(runtime.text)
+        allinfo.append(infolist)
 
+    years = [2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017]
+
+
+    # plt.plot(names,values,'ro')
+    # plt.plot(Year , Rating, 'ro')
+    # plt.axis([ 2007, 2017,7.9, 9.5])
+    # plt.show()
 
     # ADD YOUR CODE HERE TO EXTRACT THE ABOVE INFORMATION ABOUT THE
     # HIGHEST RATED MOVIES
     # NOTE: FOR THIS EXERCISE YOU ARE ALLOWED (BUT NOT REQUIRED) TO IGNORE
     # UNICODE CHARACTERS AND SIMPLY LEAVE THEM OUT OF THE OUTPUT.
 
-    return []   # REPLACE THIS LINE AS WELL IF APPROPRIATE
+    return allinfo   # REPLACE THIS LINE AS WELL IF APPROPRIATE
 
 
 def save_csv(outfile, movies):
     """
     Output a CSV file containing highest rated movies.
     """
+
     writer = csv.writer(outfile)
     writer.writerow(['Title', 'Rating', 'Year', 'Actors', 'Runtime'])
+    for line in movies:
+        writer.writerow(line)
 
     # ADD SOME CODE OF YOURSELF HERE TO WRITE THE MOVIES TO DISK
 
