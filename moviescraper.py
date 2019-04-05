@@ -29,7 +29,7 @@ def extract_movies(dom):
     """
 
     dom.encode("utf-8")
-    allinfo = []
+    movies = []
 
     for title in dom.findAll("div", {"class": "lister-item mode-advanced"}):
         infolist = []
@@ -46,42 +46,44 @@ def extract_movies(dom):
             infolist.append(actors.text)
         for runtime in title.findAll("span", {"class": "runtime"}):
             infolist.append(runtime.text)
-        allinfo.append(infolist)
+        movies.append(infolist)
 
-    year = []
+    return movies   # REPLACE THIS LINE AS WELL IF APPROPRIATE
+
+def make_plot(movies):
+
+    years = []
     rating = []
-    average = {}
+    averageRate = {}
+    new = {}
 
-    for row in allinfo:
-        rating.append(row[1])
-        year.append(row[2])
-        if row[2] not in average:
-            average[row[2]] = rating
+    for row in movies:
+        if row[2] not in years:
+            years.append(row[2])
+        years = sorted(years)
+
+        if row[2] not in averageRate:
+            averageRate[row[2]] = [row[1]]
         else:
-            average[row[2]].append(rating)
-    print(average)
+            averageRate[row[2]].append(row[1])
 
+    # make the an average nnumber of the rating list
+    for year in averageRate:
+        ratings = averageRate[year]
+        averageRate[year] = average(ratings)
+        averageRate[year] = round(averageRate[year],2)
 
+    for year in years:
+        new[year] = averageRate[year]
 
-
-    # the histogram of the data
-    plt.bar(year,rating ,facecolor='g')
+    plt.bar(range(len(new)), list(new.values()), align='center')
+    plt.xticks(range(len(new)), list(new.keys()))
     plt.xlabel('years')
     plt.ylabel('ratings')
-    plt.title('Ratings of movies')
-    plt.axis([ 2007, 2017,7.9, 9.5])
-    plt.grid(True)
     plt.show()
 
-    # ADD YOUR CODE HERE TO EXTRACT THE ABOVE INFORMATION ABOUT THE
-    # HIGHEST RATED MOVIES
-    # NOTE: FOR THIS EXERCISE YOU ARE ALLOWED (BUT NOT REQUIRED) TO IGNORE
-    # UNICODE CHARACTERS AND SIMPLY LEAVE THEM OUT OF THE OUTPUT.
-
-    return allinfo   # REPLACE THIS LINE AS WELL IF APPROPRIATE
-
-# def Average(lst):
-#     return sum(lst) / len(lst)
+def average(lst):
+    return sum(lst) / len(lst)
 
 def save_csv(outfile, movies):
     """
@@ -137,6 +139,7 @@ if __name__ == "__main__":
 
     # extract the movies (using the function you implemented)
     movies = extract_movies(dom)
+    make_plot(movies)
 
     # write the CSV file to disk (including a header)
     with open(OUTPUT_CSV, 'w', newline='') as output_file:
