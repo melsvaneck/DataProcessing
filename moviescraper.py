@@ -48,13 +48,30 @@ def extract_movies(dom):
             infolist.append(runtime.text)
         allinfo.append(infolist)
 
-    years = [2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017]
+    year = []
+    rating = []
+    average = {}
+
+    for row in allinfo:
+        rating.append(row[1])
+        year.append(row[2])
+        if row[2] not in average:
+            average[row[2]] = rating
+        else:
+            average[row[2]].append(rating)
+    print(average)
 
 
-    # plt.plot(names,values,'ro')
-    # plt.plot(Year , Rating, 'ro')
-    # plt.axis([ 2007, 2017,7.9, 9.5])
-    # plt.show()
+
+
+    # the histogram of the data
+    plt.bar(year,rating ,facecolor='g')
+    plt.xlabel('years')
+    plt.ylabel('ratings')
+    plt.title('Ratings of movies')
+    plt.axis([ 2007, 2017,7.9, 9.5])
+    plt.grid(True)
+    plt.show()
 
     # ADD YOUR CODE HERE TO EXTRACT THE ABOVE INFORMATION ABOUT THE
     # HIGHEST RATED MOVIES
@@ -63,6 +80,8 @@ def extract_movies(dom):
 
     return allinfo   # REPLACE THIS LINE AS WELL IF APPROPRIATE
 
+# def Average(lst):
+#     return sum(lst) / len(lst)
 
 def save_csv(outfile, movies):
     """
