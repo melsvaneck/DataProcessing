@@ -11,6 +11,7 @@ from requests.exceptions import RequestException
 from contextlib import closing
 from bs4 import BeautifulSoup
 
+
 TARGET_URL = "https://www.imdb.com/search/title?title_type=feature&release_date=2008-01-01,2018-01-01&num_votes=5000,&sort=user_rating,desc"
 BACKUP_HTML = 'movies.html'
 OUTPUT_CSV = 'movies.csv'
@@ -51,56 +52,6 @@ def extract_movies(dom):
             movie["Runtime"] = runtime
         movies.append(movie)
     return movies
-
-def make_plot(movies):
-
-    years = []
-    averageRate = {}
-    allrates = []
-    new = {}
-    # make a chronological list of all the years where movies where made
-    for movie in movies:
-        allrates.append(movies[movie]["rating"])
-        if movies[movie]["year"] not in years:
-            years.append(movies[movie]["year"])
-            averageRate[movies[movie]["year"]] = [movies[movie]["rating"]]
-        else:
-            averageRate[movies[movie]["year"]].append(movies[movie]["rating"])
-    years = sorted(years)
-    totalavg = average(allrates)
-    totalavg = round(totalavg,2)
-    allrates = []
-    # make the an average number of the rating list
-    for year in averageRate:
-        ratings = averageRate[year]
-        averageRate[year] = average(ratings)
-        averageRate[year] = round(averageRate[year],2)
-        allrates.append(totalavg)
-
-    for year in years:
-        new[year] = averageRate[year]
-
-
-    plt.figure(figsize=(12,4))
-    plt.subplot(121)
-    plt.bar(range(len(new)), list(new.values()), align='center')
-    plt.xticks(range(len(new)), list(new.keys()))
-    plt.ylabel('ratings')
-    plt.xlabel('years')
-
-
-    plt.subplot(122)
-    plt.scatter(range(len(new)), list(new.values()), color="red")
-    plt.plot(range(len(new)), allrates)
-    plt.xticks(range(len(new)), list(new.keys()))
-    plt.ylim(0,10)
-    plt.xlabel('years')
-    plt.ylabel('ratings')
-
-    plt.show()
-
-def average(lst):
-    return sum(lst) / len(lst)
 
 def save_csv(outfile, movies):
     """

@@ -22,7 +22,6 @@ def make_plot(movies):
     allrates = []
     new = {}
 
-
     for movie in movies:
         # Make a list of all the ratings for a total average
         allrates.append(movies[movie]["Rating"])
