@@ -74,10 +74,6 @@ def save_csv(outfile, movies):
     except IOError:
         print("I/O error")
 
-
-    # ADD SOME CODE OF YOURSELF HERE TO WRITE THE MOVIES TO DISK
-
-
 def simple_get(url):
     """
     Attempts to get the content at `url` by making an HTTP GET request.
