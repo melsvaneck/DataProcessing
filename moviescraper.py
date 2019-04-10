@@ -10,7 +10,6 @@ from requests import get
 from requests.exceptions import RequestException
 from contextlib import closing
 from bs4 import BeautifulSoup
-import matplotlib.pyplot as plt
 
 TARGET_URL = "https://www.imdb.com/search/title?title_type=feature&release_date=2008-01-01,2018-01-01&num_votes=5000,&sort=user_rating,desc"
 BACKUP_HTML = 'movies.html'
@@ -32,54 +31,72 @@ def extract_movies(dom):
     movies = []
 
     for title in dom.findAll("div", {"class": "lister-item mode-advanced"}):
-        infolist = []
-        infolist.append(title.h3.a.text)
+        movie = {}
+        movie["Title"] = title.h3.a.text
         for rating in title.findAll("span", {"class": "value"}):
-            infolist.append(float(rating.text))
+            movie["Rating"] = float(rating.text)
         for year in title.findAll("span", {"class": "lister-item-year text-muted unbold"}):
             year = year.text
             year = year.replace('(', '').replace(')', '').replace('II', '')\
                         .replace('I', '')
             year = int(year)
-            infolist.append(year)
-        for actors in title.select('a[href*=_st]'):
-            infolist.append(actors.text)
+            movie["Year"] = year
+        actors = []
+        for actor in title.select('a[href*=_st]'):
+            actors.append(actor.text)
+        actorsstring = "/".join(actors)
+        movie["Actors"] = actorsstring
         for runtime in title.findAll("span", {"class": "runtime"}):
-            infolist.append(runtime.text)
-        movies.append(infolist)
-
-    return movies   # REPLACE THIS LINE AS WELL IF APPROPRIATE
+            runtime = (runtime.text).replace("min" , "")
+            movie["Runtime"] = runtime
+        movies.append(movie)
+    return movies
 
 def make_plot(movies):
 
     years = []
-    rating = []
     averageRate = {}
+    allrates = []
     new = {}
-
-    for row in movies:
-        if row[2] not in years:
-            years.append(row[2])
-        years = sorted(years)
-
-        if row[2] not in averageRate:
-            averageRate[row[2]] = [row[1]]
+    # make a chronological list of all the years where movies where made
+    for movie in movies:
+        allrates.append(movies[movie]["rating"])
+        if movies[movie]["year"] not in years:
+            years.append(movies[movie]["year"])
+            averageRate[movies[movie]["year"]] = [movies[movie]["rating"]]
         else:
-            averageRate[row[2]].append(row[1])
-
-    # make the an average nnumber of the rating list
+            averageRate[movies[movie]["year"]].append(movies[movie]["rating"])
+    years = sorted(years)
+    totalavg = average(allrates)
+    totalavg = round(totalavg,2)
+    allrates = []
+    # make the an average number of the rating list
     for year in averageRate:
         ratings = averageRate[year]
         averageRate[year] = average(ratings)
         averageRate[year] = round(averageRate[year],2)
+        allrates.append(totalavg)
 
     for year in years:
         new[year] = averageRate[year]
 
+
+    plt.figure(figsize=(12,4))
+    plt.subplot(121)
     plt.bar(range(len(new)), list(new.values()), align='center')
     plt.xticks(range(len(new)), list(new.keys()))
+    plt.ylabel('ratings')
+    plt.xlabel('years')
+
+
+    plt.subplot(122)
+    plt.scatter(range(len(new)), list(new.values()), color="red")
+    plt.plot(range(len(new)), allrates)
+    plt.xticks(range(len(new)), list(new.keys()))
+    plt.ylim(0,10)
     plt.xlabel('years')
     plt.ylabel('ratings')
+
     plt.show()
 
 def average(lst):
@@ -89,11 +106,23 @@ def save_csv(outfile, movies):
     """
     Output a CSV file containing highest rated movies.
     """
+    #
+    # writer = csv.writer(outfile)
+    # writer.writerow(['Title', 'Rating', 'Year', 'Actors', 'Runtime'])
+    # for line in movies:
+    #     writer.writerow(line)
 
-    writer = csv.writer(outfile)
-    writer.writerow(['Title', 'Rating', 'Year', 'Actors', 'Runtime'])
-    for line in movies:
-        writer.writerow(line)
+    csv_columns = ['Title', 'Rating', 'Year', 'Actors', 'Runtime']
+
+    try:
+        with open(outfile, 'w') as csvfile:
+            writer = csv.DictWriter(csvfile, fieldnames=csv_columns)
+            writer.writeheader()
+            for data in movies:
+                writer.writerow(data)
+    except IOError:
+        print("I/O error")
+
 
     # ADD SOME CODE OF YOURSELF HERE TO WRITE THE MOVIES TO DISK
 
@@ -139,8 +168,7 @@ if __name__ == "__main__":
 
     # extract the movies (using the function you implemented)
     movies = extract_movies(dom)
-    make_plot(movies)
 
     # write the CSV file to disk (including a header)
-    with open(OUTPUT_CSV, 'w', newline='') as output_file:
-        save_csv(output_file, movies)
+    # with open(OUTPUT_CSV, 'w', newline='') as output_file:
+    save_csv("movies.csv", movies)
