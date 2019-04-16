@@ -35,10 +35,10 @@ def extract_movies(dom):
         for rating in title.findAll("span", {"class": "value"}):
             movie["Rating"] = float(rating.text)
         for year in title.findAll("span",
-                          {"class": "lister-item-year text-muted unbold"}):
+                                  {"class": "lister-item-year text-muted unbold"}):
             year = year.text
             year = year.replace('(', '').replace(')', '').replace('II', '')\
-                        .replace('I', '')
+                .replace('I', '')
             year = int(year)
             movie["Year"] = year
         actors = []
@@ -72,6 +72,7 @@ def save_csv(outfile, movies):
     except IOError:
         print("I/O error")
 
+
 def simple_get(url):
     """
     Attempts to get the content at `url` by making an HTTP GET request.
@@ -103,7 +104,8 @@ def is_good_response(resp):
 if __name__ == "__main__":
 
     # get HTML content at target URL
-    html = simple_get("https://www.imdb.com/search/title?title_type=feature&release_date=2008-01-01,2018-01-01&num_votes=5000,&sort=user_rating,desc")
+    html = simple_get(
+        "https://www.imdb.com/search/title?title_type=feature&release_date=2008-01-01,2018-01-01&num_votes=5000,&sort=user_rating,desc")
 
     # save a copy to disk in the current directory, this serves as an backup
     # of the original HTML, will be used in grading.

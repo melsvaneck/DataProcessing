@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-# Name:
-# Student number:
+# Name:Mels van Eck
+# Student number:12505757
 """
 This script visualizes data obtained from a .csv file
 """
@@ -14,6 +14,7 @@ import numpy as np
 
 # Global constants for the input file, first and last year
 INPUT_CSV = "movies.csv"
+
 
 def make_plot(movies):
 
@@ -37,7 +38,7 @@ def make_plot(movies):
 
     # calculate the total average
     totalavg = average(allrates)
-    totalavg = round(totalavg,2)
+    totalavg = round(totalavg, 2)
 
     # make it compatible for the plot
     allrates = [totalavg] * len(averageRate)
@@ -48,12 +49,10 @@ def make_plot(movies):
         averageRate[year] = average(ratings)
         averageRate[year] = round(averageRate[year], 2)
 
-
-
-    plt.figure(figsize=(12,4))
+    plt.figure(figsize=(12, 4))
     plt.subplot(121)
-    plt.plot(range(len(averageRate )), list(averageRate .values()))
-    plt.xticks(range(len(averageRate )), list(averageRate .keys()))
+    plt.plot(range(len(averageRate)), list(averageRate .values()))
+    plt.xticks(range(len(averageRate)), list(averageRate .keys()))
     plt.yticks(np.arange(0, 11, 1.0))
     plt.ylabel('ratings')
     plt.xlabel('years')
@@ -62,7 +61,7 @@ def make_plot(movies):
     plt.subplot(122)
     red_patch = mpatches.Patch(color='red', label='yearly avg.')
     blue_patch = mpatches.Patch(color='blue', label='total avg.')
-    plt.legend(handles=[red_patch,blue_patch])
+    plt.legend(handles=[red_patch, blue_patch])
     plt.scatter(range(len(averageRate)), list(averageRate.values()), color="red")
     plt.plot(range(len(averageRate)), allrates)
     plt.xticks(range(len(averageRate)), list(averageRate.keys()))
@@ -74,8 +73,11 @@ def make_plot(movies):
     plt.show()
 
 # average calculator
+
+
 def average(lst):
     return sum(lst) / len(lst)
+
 
 if __name__ == "__main__":
 
