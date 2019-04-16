@@ -7,7 +7,6 @@ This script visualizes data obtained from a .csv file
 
 import csv
 import matplotlib.pyplot as plt
-import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 from matplotlib.ticker import FormatStrFormatter
 import numpy as np
