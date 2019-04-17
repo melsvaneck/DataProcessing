@@ -29,48 +29,61 @@ def get_data():
                                            'Infant mortality (per 1000 births)',
                                            'GDP ($ per capita) dollars'])
 
-    # set the index to Countrty
-    data.set_index('Country',inplace = True)
-
     # remove all the "dollars" texts and replace comma's with points in the columns
-    data['GDP ($ per capita) dollars'].replace(regex=True, inplace=True,
-                                               to_replace=r'\D', value=r'')
-    data['Pop. Density (per sq. mi.)'].replace(regex=True, inplace=True,
-                                               to_replace=r',', value=r'.')
-    data['Infant mortality (per 1000 births)'].replace(regex=True, inplace=True,
-                                                       to_replace=r',', value=r'.')
-
+    data['GDP ($ per capita) dollars'].replace(regex=True,
+                                               inplace=True,
+                                               to_replace=r'\D',
+                                               value=r'')
+    data['Pop. Density (per sq. mi.)'].replace(regex=True,
+                                               inplace=True,
+                                               to_replace=r',',
+                                               value=r'.')
+    data['Infant mortality (per 1000 births)'].replace(regex=True,
+                                                       inplace=True,
+                                                       to_replace=r',',
+                                                       value=r'.')
 
     # make the datatype of GDP,Density and Infant mortality numeric
+    data['Infant mortality (per 1000 births)'] = \
+        pd.to_numeric(data['Infant mortality (per 1000 births)'], errors='coerce')
     data['GDP ($ per capita) dollars'] = \
         pd.to_numeric(data['GDP ($ per capita) dollars'], errors='coerce')
-
     data['Pop. Density (per sq. mi.)'] = \
         pd.to_numeric(data['Pop. Density (per sq. mi.)'], errors='coerce')
 
-    data['Infant mortality (per 1000 births)'] = \
-        pd.to_numeric(data['Infant mortality (per 1000 births)'], errors='coerce')
-
     # getting rid of the false values
     # proof: http://statisticstimes.com/economy/projected-world-gdp-capita-ranking.php
-    data.where((data['GDP ($ per capita) dollars'] < 150000), inplace=True)
+    data['GDP ($ per capita) dollars'].where(
+        (data['GDP ($ per capita) dollars'] < 150000), inplace=True)
 
     return data
 
+
 def plot_boxplot(data):
 
+    # Getting the mean,median and mode from the infant mortality column
+    five_numsum = data['Infant mortality (per 1000 births)'].describe()
+    print("Five number summarry of the Infant mortality\n" +
+          f"Minimum value: {round(five_numsum['min'],2)}\n" +
+          f"First quartile: {round(five_numsum['25%'],2)}\n" +
+          f"Median: {round(five_numsum['50%'],2)}\n" +
+          f"Third quartile: {round(five_numsum['75%'],2)}\n" +
+          f"Maximum value: {round(five_numsum['max'],2)}\n")
 
-    # Getting the mean,medioan and mode from the infant mortality column
-    numsum = data['Infant mortality (per 1000 births)'].describe()
-    print(f"Minimum value: {numsum['min']}")
-    print(f"First quartile: {numsum['25%']}")
-    print(f"Median: {numsum['50%']}")
-    print(f"Third quartile: {numsum['75%']}")
-    print(f"Maximum value: {numsum['max']}")
+    # making the boxplot of the infant mortality
+    ax = data.boxplot(column='Infant mortality (per 1000 births)')
 
-    data.boxplot(column = 'Infant mortality (per 1000 births)')
+    # set amount of ticks and instances
+    plt.yticks(np.arange(0, 210, 10))
+
+    # set title
+    ax.set_title("Infant mortality")
+
+    # set labels
+    ax.set_ylabel("Amount", labelpad=20, weight='bold', size=12)
 
     plt.show()
+
 
 def plot_histogram(data):
     # Getting the mean,medioan and mode from the GDP column
@@ -79,11 +92,10 @@ def plot_histogram(data):
     medianGDP = data['GDP ($ per capita) dollars'].describe()['50%']
 
     # print the data
-    print("GDP Data")
-    print(f"Mean:{meanGDP}")
-    print(f"Mode:{modeGDP}")
-    print(f"Median:{medianGDP}")
-    print()
+    print(f"The mean, mode and median of the GDP ($ per capita) \n" +
+          f"Mean:{meanGDP}\n" +
+          f"Mode:{modeGDP}\n" +
+          f"Median:{medianGDP}\n")
 
     # make a histogram
     plot = data.hist(column='GDP ($ per capita) dollars', bins=75, grid=False,
@@ -106,7 +118,7 @@ def plot_histogram(data):
         for tick in vals:
             x.axhline(y=tick, linestyle='dashed', alpha=0.4, color='#eeeeee', zorder=1)
 
-        # Remove title
+        # set title
         x.set_title("GDP ($ per capita) in dollars")
 
         # Set axis labels
@@ -115,10 +127,14 @@ def plot_histogram(data):
 
         plt.show()
 
+
 def make_json(data):
 
- # make a json file
- data.to_json(r'D.json',orient = 'index')
+    # set the index to Countrty
+    data.set_index('Country', inplace=True)
+
+    # make a json file
+    data.to_json(r'D.json', orient='index')
 
 
 if __name__ == "__main__":
