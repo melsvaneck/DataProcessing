@@ -60,7 +60,6 @@ def get_data():
 
 
 def plot_boxplot(data):
-
     # Getting the mean,median and mode from the infant mortality column
     five_numsum = data['Infant mortality (per 1000 births)'].describe()
     print("Five number summarry of the Infant mortality\n" +
@@ -71,21 +70,23 @@ def plot_boxplot(data):
           f"Maximum value: {round(five_numsum['max'],2)}\n")
 
     # making the boxplot of the infant mortality
-    ax = data.boxplot(column='Infant mortality (per 1000 births)')
-
+    ax = data.boxplot(column='Infant mortality (per 1000 births)',figsize=(12, 8),notch = True)
+    ax.axes.get_xaxis().set_visible(False)
+    
     # set amount of ticks and instances
-    plt.yticks(np.arange(0, 210, 10))
+    plt.yticks(np.arange(0, 201, 10))
 
     # set title
-    ax.set_title("Infant mortality")
+    plt.title("Infant mortality")
 
     # set labels
-    ax.set_ylabel("Amount", labelpad=20, weight='bold', size=12)
+    ax.set_ylabel("Infant mortality (per 1000 births)", labelpad=20, weight='bold', size=12)
 
     plt.show()
 
 
 def plot_histogram(data):
+    plt.style.use('ggplot')
     # Getting the mean,medioan and mode from the GDP column
     meanGDP = round(data['GDP ($ per capita) dollars'].describe()['mean'], 2)
     modeGDP = data['GDP ($ per capita) dollars'].mode()[0]
@@ -99,7 +100,7 @@ def plot_histogram(data):
 
     # make a histogram
     plot = data.hist(column='GDP ($ per capita) dollars', bins=75, grid=False,
-                     figsize=(12, 8), color='#86bf91', zorder=2, rwidth=0.9)
+                     figsize=(12, 8), zorder=2, rwidth=0.9)
 
     plot = plot[0]
     for x in plot:
@@ -116,7 +117,7 @@ def plot_histogram(data):
         # Draw horizontal axis lines
         vals = x.get_yticks()
         for tick in vals:
-            x.axhline(y=tick, linestyle='dashed', alpha=0.4, color='#eeeeee', zorder=1)
+            x.axhline(y=tick, linestyle='dashed', alpha=0.4, zorder=1)
 
         # set title
         x.set_title("GDP ($ per capita) in dollars")
