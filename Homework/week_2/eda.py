@@ -11,6 +11,7 @@ it will show: “Country”, “Region”,
 
 import csv
 import math
+import json
 import pandas as pd
 from pandas import DataFrame
 import numpy as np
@@ -21,17 +22,15 @@ INPUT_CSV = "input.csv"
 
 
 def get_data():
-    # makes it print all the data in my command line
-    pd.set_option('display.max_rows', 500)
-    pd.set_option('display.max_columns', 500)
-    pd.set_option('display.width', 1000)
-
     # select only the columns that i need to select
     data = pd.read_csv(INPUT_CSV, usecols=['Country',
                                            'Region',
                                            'Pop. Density (per sq. mi.)',
                                            'Infant mortality (per 1000 births)',
                                            'GDP ($ per capita) dollars'])
+
+    # set the index to Countrty
+    data.set_index('Country',inplace = True)
 
     # remove all the "dollars" texts and replace comma's with points in the columns
     data['GDP ($ per capita) dollars'].replace(regex=True, inplace=True,
@@ -40,6 +39,7 @@ def get_data():
                                                to_replace=r',', value=r'.')
     data['Infant mortality (per 1000 births)'].replace(regex=True, inplace=True,
                                                        to_replace=r',', value=r'.')
+
 
     # make the datatype of GDP,Density and Infant mortality numeric
     data['GDP ($ per capita) dollars'] = \
@@ -55,24 +55,37 @@ def get_data():
     # proof: http://statisticstimes.com/economy/projected-world-gdp-capita-ranking.php
     data.where((data['GDP ($ per capita) dollars'] < 150000), inplace=True)
 
-    return DataFrame(data)
+    return data
+
+def plot_boxplot(data):
 
 
-def Get_mean(data):
+    # Getting the mean,medioan and mode from the infant mortality column
+    numsum = data['Infant mortality (per 1000 births)'].describe()
+    print(f"Minimum value: {numsum['min']}")
+    print(f"First quartile: {numsum['25%']}")
+    print(f"Median: {numsum['50%']}")
+    print(f"Third quartile: {numsum['75%']}")
+    print(f"Maximum value: {numsum['max']}")
 
-    # Getting the mean,medioan and mode from the data
-    meanGDP = round(data['GDP ($ per capita) dollars'].mean(skipna=True), 2)
-    modeGDP = data['GDP ($ per capita) dollars'].mode()[0]
-    medianGDP = data.loc[:, 'GDP ($ per capita) dollars'].median()
+    data.boxplot(column = 'Infant mortality (per 1000 births)')
 
-    # print the data
-    print(f"Mean:{meanGDP}")
-    print(f"Mode:{modeGDP}")
-    print(f"median:{medianGDP}")
-
+    plt.show()
 
 def plot_histogram(data):
+    # Getting the mean,medioan and mode from the GDP column
+    meanGDP = round(data['GDP ($ per capita) dollars'].describe()['mean'], 2)
+    modeGDP = data['GDP ($ per capita) dollars'].mode()[0]
+    medianGDP = data['GDP ($ per capita) dollars'].describe()['50%']
 
+    # print the data
+    print("GDP Data")
+    print(f"Mean:{meanGDP}")
+    print(f"Mode:{modeGDP}")
+    print(f"Median:{medianGDP}")
+    print()
+
+    # make a histogram
     plot = data.hist(column='GDP ($ per capita) dollars', bins=75, grid=False,
                      figsize=(12, 8), color='#86bf91', zorder=2, rwidth=0.9)
 
@@ -85,8 +98,8 @@ def plot_histogram(data):
         x.spines['left'].set_visible(False)
 
         # Switch off ticks
-        x.tick_params(axis="both", which="both", bottom="off", top="off",
-                      labelbottom="on",  left="off", right="off", labelleft="on")
+        x.tick_params(axis="both", which="both", bottom=False, top=False,
+                      labelbottom=True,  left=False, right=False, labelleft=True)
 
         # Draw horizontal axis lines
         vals = x.get_yticks()
@@ -100,11 +113,17 @@ def plot_histogram(data):
         x.set_xlabel('Dollars', labelpad=20, weight='bold', size=12)
         x.set_ylabel("Number of countries", labelpad=20, weight='bold', size=12)
 
-    plt.show()
+        plt.show()
+
+def make_json(data):
+
+ # make a json file
+ data.to_json(r'D.json',orient = 'index')
 
 
 if __name__ == "__main__":
 
     data = get_data()
-    Get_mean(data)
     plot_histogram(data)
+    plot_boxplot(data)
+    make_json(data)
