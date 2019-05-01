@@ -48,7 +48,7 @@ def read_csv(input_csv):
 def make_json(data):
 
     # make a json file
-    data.to_json(r'D.json', orient='index')
+    data.to_json(r'Data.json', orient='index')
 
 if __name__ == "__main__":
 
