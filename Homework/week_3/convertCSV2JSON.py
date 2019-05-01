@@ -7,18 +7,20 @@ This script converts CSV files to a JSON file.
 import csv
 import sys
 import pandas as pd
+from datetime import datetime
 
 
 def get_name():
 
     # check for correct usage
-    if len (sys.argv) != 2 :
+    if len(sys.argv) != 2:
         print("Usage: python convertCSV2JSON.py filename.csv")
-        sys.exit (1)
+        sys.exit(1)
 
     input_csv = sys.argv[1]
 
     return input_csv
+
 
 def read_csv(input_csv):
 
@@ -28,29 +30,24 @@ def read_csv(input_csv):
     pd.set_option('display.width', 1000)
 
     # read the csv file with pandas
-    data = pd.read_csv(input_csv,delimiter=";", usecols = ['Locatie',
-                                                           'Type_knelpunt',
-                                                           'Diersoorten',
-                                                           'Type_oplossing',
-                                                           'Jaar_realisatie'])
+    data = pd.read_csv(input_csv, delimiter=",", usecols=['STN',
+                                                          'YYYYMMDD',
 
-    data['Jaar_realisatie'] = \
-        pd.to_numeric(data['Jaar_realisatie'], errors='coerce')
+                                                          'FG'])
+    # convert data to datetime
+    data['YYYYMMDD'] = pd.to_datetime(data['YYYYMMDD'],
+                                      format='%Y%m%d').dt.strftime("%m/%d/%Y")
 
-    data['Jaar_realisatie'] = data['Jaar_realisatie'].replace(0,"Nan")
-
-    data['Diersoorten'] = data['Diersoorten'].str.split("-")
-
-
-
+    
     return data
+
 
 def make_json(data):
 
     # make a json file
     data.to_json(r'Data.json', orient='index')
 
-if __name__ == "__main__":
 
+if __name__ == "__main__":
 
     make_json(read_csv(get_name()))
