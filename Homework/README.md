@@ -9,3 +9,8 @@ second run vizualiser.py
 Homework for week 2 shows data from a csv file in a boxplot and a histogram
 run eda.py
 check out the json file
+# Week 2
+Homework for week 2 shows data from a csv file in a boxplot and a histogram
+run convertCSV2JSON.py
+check out the json file
+got to the web page
