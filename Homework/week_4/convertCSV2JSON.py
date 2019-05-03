@@ -30,19 +30,18 @@ def read_csv(input_csv):
     pd.set_option('display.width', 1000)
 
     # read the csv file with pandas
-    data = pd.read_csv(input_csv, delimiter=",", usecols=['STN',
-                                                          'YYYYMMDD',
+    data = pd.read_csv(input_csv, delimiter=",")
 
-                                                          'FG'])
-    # convert data to datetime
-    data['YYYYMMDD'] = pd.to_datetime(data['YYYYMMDD'],
-                                      format='%Y%m%d').dt.strftime("%m/%d/%Y")
+    data.replace(regex=True,inplace=True,to_replace=r' ',
+                                               value=r'')
 
-    
     return data
 
 
 def make_json(data):
+
+    # Choose the index
+    data.set_index('Common name', inplace=True)
 
     # make a json file
     data.to_json(r'Data.json', orient='index')

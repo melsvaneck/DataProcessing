@@ -72,7 +72,7 @@ def plot_boxplot(data):
     # making the boxplot of the infant mortality
     ax = data.boxplot(column='Infant mortality (per 1000 births)',figsize=(12, 8),notch = True)
     ax.axes.get_xaxis().set_visible(False)
-    
+
     # set amount of ticks and instances
     plt.yticks(np.arange(0, 201, 10))
 
