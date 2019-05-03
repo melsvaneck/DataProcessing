@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <script type="text/javascript" src="d3/d3.js"></script>
+    </head>
+    <body>
+        <script type="text/javascript">
+            d3.select("head").append("title").text("Nice barchart!");
+            d3.select("body").append("h1").text("Mels van Eck");
+            d3.select("body").append("h2").text("12505757");
+            d3.select("body")
+              .append("p")
+              .text("This bar chart represents bla and bla and alot of bloops");
+
+              var dataset = [ 5, 10, 15, 20, 25, 30];
+
+              d3.select("body").selectAll("new")
+                  .data(dataset)
+                  .enter()
+                  .append("p")
+                  .text(function(d) { return "I can count up to " + d; })
+                  .style("color", function(d) {
+                    if (d > 15) {
+                      return "red";
+                    } else {
+                      return "black";
+                    }
+                  });
+
+        </script>
+    </body>
+</html>
