@@ -32,19 +32,14 @@ def read_csv(input_csv):
     # read the csv file with pandas
     data = pd.read_csv(input_csv, delimiter=",")
 
-    data.replace(regex=True,inplace=True,to_replace=r' ',
-                                               value=r'')
 
     return data
 
 
 def make_json(data):
 
-    # Choose the index
-    data.set_index('Common name', inplace=True)
-
     # make a json file
-    data.to_json(r'Data.json', orient='index')
+    data.to_json(r'Data.json', orient='records')
 
 
 if __name__ == "__main__":

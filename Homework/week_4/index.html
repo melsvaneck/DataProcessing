@@ -1,59 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+      <script src="http://d3js.org/d3.v3.min.js"></script>
+      <script src='https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.7.1/d3-tip.min.js'></script>
         <meta charset="utf-8">
         <script type="text/javascript" src="d3/d3.js"></script>
         <link rel="stylesheet" href="styles.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     </head>
-    <body>
 
+      <select id="myList" class="dropdown" >
+        <option value="Total">Choose The data of species you want to see</option>
+        <option value="Total">Total species</option>
+        <option value="Extinct">Extinct species</option>
+        <option value="Critically endangered">Critically endangered species</option>
+        <option value="Near threatened">Near threatened species</option>
+        <option value="Not threatened">Not threatened species</option>
+        <option value="Total threatened">Total threatened species</option>
+        <option value="Vulnerable">Vulnerable species</option>
+      </select>
 
-        <script type="text/javascript">
-            d3.select("head").append("title").text("Nice barchart!");
-            d3.select("body").append("p").text("Mels van Eck");
-            d3.select("body").append("p").text("12505757");
-            d3.select("body")
-              .append("p")
-              .text("This bar chart represents bla and bla and alot of bloops");
+      <script src="main.js"></script>
 
-
-                var endangered = [];
-                var extinct = [];
-                var nearThreatened = [];
-                var notThreatened = [];
-                var total = [];
-                var totalThreatened = [];
-                var vulnerable = [];
-
-                d3.json("Data.json").then(function (species) {
-                  Object.values(species).forEach(value => {
-                      extinct.push(value.Extinct)
-                    })
-                    console.log(extinct);
-                    d3.select("body").selectAll("div")
-                      .data(extinct)  // <-- The answer is here!
-                      .enter()
-                      .append("div")
-                      .attr("class", "bar")
-                      .style("height", function(d) {
-                          var barHeight = d * 5;
-                          return barHeight + "px";
-                        });
-
-                });
-
-
-
-
-
-
-
-
-
-
-
-
-
-        </script>
     </body>
 </html>

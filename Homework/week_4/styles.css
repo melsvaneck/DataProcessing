@@ -1,7 +1,25 @@
-div.bar {
-    display: inline-block;
-    width: 20px;
-    height: 75px;   /* We'll override this later */
-    background-color: teal;
-    margin-right: 2px;
+html, body {
+  margin: 0;
+  height: 100%
 }
+
+.bar {
+   fill: #77DD77
+}
+.bar:hover {
+  fill: red
+
+}
+.axis { font: 14px sans-serif; }
+
+.n {
+    opacity: .8;
+    font-size: 10px;
+    margin-left: 4px;
+    font-family: sans-serif;
+    color: white;
+    padding: 6px;
+    background-color: #3C3176;
+    border-radius: 10px;
+    
+  }
