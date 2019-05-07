@@ -32,7 +32,6 @@ def read_csv(input_csv):
     # read the csv file with pandas
     data = pd.read_csv(input_csv, delimiter=",")
 
-
     return data
 
 
