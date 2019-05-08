@@ -8,6 +8,7 @@ document.getElementById("myList").onchange = function() {
 }
 
 function makeBars(data) {
+  
   //remove previous charts if any
   d3.selectAll("svg").remove();
   d3.selectAll("p").remove();
