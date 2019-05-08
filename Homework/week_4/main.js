@@ -1,3 +1,9 @@
+/*
+Name:mels van eck
+Student number:12505757
+This script Makes a bar chart out of data about threatened species in the Netherlands
+*/
+
 d3.select("head").append("title").text("Nice barchart!");
 d3.select("body").append("h1").text("Mels van Eck");
 d3.select("body").append("h1").text("12505757");
@@ -13,6 +19,7 @@ function makeBars(data) {
   d3.selectAll("svg").remove();
   d3.selectAll("p").remove();
 
+  // make a modular text for each bar chart
   d3.select("body")
     .append("p")
     .text("This bar chart represents the amount of " + data + " species in the Netherlands");
@@ -42,6 +49,12 @@ function makeBars(data) {
       .attr("transform", "rotate(-90)")
       .text("Amount of " + data + " species");
 
+    svg.append("text")
+      .attr("x", 400)
+      .attr("y", 10)
+      .attr("dy", ".25em")
+      .text(data + " species in the Netherlands");
+
     // make same amount of bars as objects in the species array
     // colour the bars (tim approved)
     var bars = svg.selectAll("bar")
@@ -67,8 +80,8 @@ function makeBars(data) {
 
     // make an array of the common names for the scaleband function
     var names = species.map(obj => {
-        return obj.Common_name;
-      })
+      return obj.Common_name;
+    })
 
     // Create yScale
     var yScale = d3.scaleLinear()
