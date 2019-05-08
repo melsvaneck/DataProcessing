@@ -8,7 +8,7 @@ document.getElementById("myList").onchange = function() {
 }
 
 function makeBars(data) {
-  
+
   //remove previous charts if any
   d3.selectAll("svg").remove();
   d3.selectAll("p").remove();
@@ -19,31 +19,6 @@ function makeBars(data) {
 
   // open the json data
   d3.json("Data.json").then(function(species) {
-
-    // make lists for the chosen data
-    var values = [];
-    var names = [];
-
-    // fill lists for the chosen data for the scaling
-    function getData(data) {
-      for (var key in species) {
-        values.push(species[key][data]);
-        names.push(species[key].Common_name);
-      };
-      return values, names
-    };
-
-    getData(data);
-    // get a max value of the chosen data for the scaling
-    var maxValue = Math.max.apply(null, values);
-
-    // round the max value to a round number in tens or 50s
-    // according to the max value
-    if (maxValue > 140) {
-      var maxRounded = Math.ceil(maxValue / 50) * 50;
-    } else {
-      var maxRounded = Math.ceil(maxValue / 10) * 10;
-    }
 
     //Width, height and margins
     var w = 750;
@@ -77,9 +52,27 @@ function makeBars(data) {
         return color(i);
       });
 
+    // get a max value of the chosen data for the scaling for scaleLinear function
+    var maxValue = d3.max(species, function(d) {
+      return +d[data];
+    });
+
+    // round the max value to a round number in tens or 50s
+    // according to the max value
+    if (maxValue > 140) {
+      var maxRounded = Math.ceil(maxValue / 50) * 50;
+    } else {
+      var maxRounded = Math.ceil(maxValue / 10) * 10;
+    }
+
+    // make an array of the common names for the scaleband function
+    var names = species.map(obj => {
+        return obj.Common_name;
+      })
+
     // Create yScale
     var yScale = d3.scaleLinear()
-      .domain([d3.min(values), maxRounded])
+      .domain([0, maxRounded])
       .range([h - marginBottom, margintop]);
 
     // Create xScale
@@ -123,24 +116,20 @@ function makeBars(data) {
 
     //function for making the bars
     // x values and width first
+    //hover and animation
+    //y values and height last
     bars.attr("x", function(d, i) {
         return xScale(d.Common_name);
       })
       .attr("width", xScale.bandwidth())
-
-      //  tooltip
       .on('mouseover', tip.show)
       .on('mouseout', tip.hide)
-
-      // animation
       .attr("y", h - marginBottom)
       .transition()
       .duration(1000)
       .delay(function(d, i) {
         return i * 150;
       })
-
-      // y values and height
       .attr("y", function(d) {
         return yScale(d[data]);
       })

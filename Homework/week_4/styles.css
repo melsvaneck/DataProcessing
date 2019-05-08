@@ -46,7 +46,7 @@ p {
 
 select {
   margin: 50px;
-  /* width: 150px; */
+  width: 400px;
   padding: 5px 35px 5px 5px;
   font-size: 16px;
   border: 1px solid #ccc;
@@ -54,5 +54,5 @@ select {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  background: url(https://www.stackoverflow.com/favicon.ico) 96% / 15% no-repeat #eee;
+  background: url(https://image.flaticon.com/icons/svg/16/16772.svg) 97% / 7% no-repeat #eee;
 }
