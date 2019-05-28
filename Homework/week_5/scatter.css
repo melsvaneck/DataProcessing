@@ -61,15 +61,61 @@ p {
   margin: 0;
 }
 
-select {
-  margin: 50px;
-  width: 400px;
-  padding: 5px 35px 5px 5px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  height: 34px;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  background: url(https://image.flaticon.com/icons/svg/16/16772.svg) 97% / 7% no-repeat #eee;
+.y.axis {
+  stroke: #B0B0B0;
+  font-size: 12px;
+}
+
+.y.axis#limit {
+  stroke: #B0B0B0;
+  stroke-width: 1;
+}
+
+.y.axis path {
+  stroke-width: 1;
+  stroke: #B0B0B0;
+}
+
+.y.axis .tick line {
+  stroke: #B0B0B0;
+  stroke-opacity: 0.3;
+}
+
+.x.axis {
+  stroke: #B0B0B0;
+  font-size: 12px;
+}
+
+.x.axis#limit {
+  stroke: #B0B0B0;
+  stroke-width: 1;
+}
+
+.x.axis path {
+  stroke-width: 1;
+  stroke: #B0B0B0;
+}
+
+.x.axis .tick line {
+  stroke: #B0B0B0;
+  stroke-opacity: 0.3;
+}
+.z.axis {
+  stroke: #B0B0B0;
+
+}
+
+.z.axis#limit {
+  stroke: #B0B0B0;
+  stroke-width: 1;
+}
+
+.z.axis path {
+  stroke-width: 1;
+  stroke: #B0B0B0;
+}
+
+.z.axis .tick line {
+  stroke: #B0B0B0;
+  stroke-opacity: 0.3;
 }

@@ -30,9 +30,9 @@ window.onload = function() {
       height: 300
     };
     margin = {
-      left: 60,
+      left: 50,
       right: 50,
-      bottom: 75,
+      bottom: 60,
       top: 25
     };
     var colors = ['#d53e4f', '#f46d43', '#fdae61', '#fee08b', '#e6f598', '#abdda4', '#66c2a5', '#3288bd'];
@@ -93,19 +93,26 @@ window.onload = function() {
       .attr('width', legend.width)
       .attr('height', h)
 
+      svg.append("rect")
+      .attr("width", "100%")
+      .attr("height", "100%")
+      .attr("fill", "#686868");
+
     // add texts to axes of the plot
     svg.append("text")
       .attr("x", -400)
-      .attr("y", 25)
+      .attr("y", 15)
       .attr("dy", ".25em")
       .attr("transform", "rotate(-90)")
-      .text("Teen pregnancy rate (%)");
+      .text("Teen pregnancy rate (%)")
+      .attr("fill", "white");
 
     svg.append("text")
       .attr("x", 100)
-      .attr("y", h - 40)
+      .attr("y", h - 25)
       .attr("dy", ".25em")
-      .text("Children (0-17) living in areas with problems with crime or violence (%)");
+      .text("Children (0-17) living in areas with problems with crime or violence (%)")
+      .attr("fill", "white");
 
     // make the scattered circles
     var circle = svg.selectAll("circle")
@@ -160,11 +167,18 @@ window.onload = function() {
 
     function makeLegend() {
       // make text for the legend
+
+      legendSvg.append("rect")
+      .attr("width", "100%")
+      .attr("height", "100%")
+      .attr("fill", "#686868");
+
       legendSvg.append("text")
         .attr("x", 0)
         .attr("y", 80)
         .attr("dy", ".25em")
-        .text("GDP in Dollars");
+        .text("GDP in Dollars")
+        .attr("fill","white");
 
       // make the bar gradient
       var gradient = legendSvg.append('defs')
@@ -175,6 +189,8 @@ window.onload = function() {
         .attr('x2', '0%')
         .attr('y2', '0%')
         .attr('spreadMethod', 'pad');
+
+
 
       // insert the legend axis
       legendSvg.append("g")
