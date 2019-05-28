@@ -2,7 +2,7 @@
 d3.select("head").append("title").text("BEES");
 d3.select("body").append("h1").text("Mels van Eck");
 d3.select("body").append("h1").text("12505757").style('top', '50px');
-d3.select("body").append("text").text("Deze map laat zien oop welke locatie er bijen kolonies leven in Amsterdam," +
+d3.select("body").append("text").text("Deze map laat zien op welke locatie er bijen volken leven in Amsterdam," +
     " zowel wilde bijen als honingbijen zijn er te zien." +
     "klik op een buurt om de verhoudingen tussen honing en wilde bijen te zien," +
     "klik op de gekleurde puntjes op de kaart om te zien hoeveel kolonies honingbijen er leven op deze plek" +
