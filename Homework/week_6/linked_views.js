@@ -1,19 +1,17 @@
 // text
 d3.select("head").append("title").text("BEES");
-d3.select("body").append("h1").text("Mels van Eck");
-d3.select("body").append("h1").text("12505757").style('top', '50px');
-d3.select("body").append("text").text("Deze map laat zien op welke locatie er bijen volken leven in Amsterdam," +
+d3.select("body").append("h3").text("Mels van Eck 12505757");
+d3.select("body").append("text").attr("class", "text_box").text("Deze map laat zien op welke locatie er bijen volken leven in Amsterdam," +
     " zowel wilde bijen als honingbijen zijn er te zien." +
-    "klik op een buurt om de verhoudingen tussen honing en wilde bijen te zien," +
-    "klik op de gekleurde puntjes op de kaart om te zien hoeveel kolonies honingbijen er leven op deze plek" +
-    'of welke soorten er zijn waargenomen.')
-  .attr("class", "text_box");
+    "Klik op een buurt om de verhoudingen tussen honing en wilde bijen te zien," +
+    " klik op de gekleurde puntjes op de kaart om te zien hoeveel kolonies honingbijen er leven op deze plek " +
+    'of welke soorten er zijn waargenomen.');
 
 // text boxes
 d3.select("body").append("text")
   .attr('class', 'info')
-  .style("top", '110px')
-  .style("font-size", "24px")
+  .style("top", '50px')
+  .style("font-size", "18px")
   .text('soorten of aantal kasten:')
   .attr("alignment-baseline", "middle");
 
@@ -32,8 +30,8 @@ var margin = {
   left: 20
 };
 
-var width = 1000
-var height = 730
+var width = 800
+var height = 600
 
 // make the svg
 var svg = d3.select("body")
@@ -47,7 +45,7 @@ var projection = d3.geoAlbers()
   .center([4.91, 52.346667])
   .parallels([51.5, 51.49])
   .rotate(120)
-  .scale(250000)
+  .scale(200000)
   .translate([width / 2, height / 2]);
 
 // make variable path
@@ -89,8 +87,11 @@ function ready(error, buurten, mokum, wild_bees, honey_bees) {
 
   // onchange function for dot selection on the map
   document.getElementById("myList").onchange = function() {
-    scatterPoints(this.value)
-  }
+    if( this.value == "special"){
+           window.open(this.options[this.selectedIndex].value)
+      };
+      scatterPoints(this.value)
+  };
 
   if (error) throw error;
 
@@ -151,7 +152,7 @@ function ready(error, buurten, mokum, wild_bees, honey_bees) {
 
   svg.append("text")
   .attr("x", 0)
-  .attr("y", 700)
+  .attr("y", 575)
   .text("Kaart van Amsterdam, bron:https://maps.amsterdam.nl/open_geodata/").attr("class", "label").attr("alignment-baseline", "middle")
   // draw the first pie chart and make the first scatter of bee points
   redraw(makeData(inside(stadsdelen[0].geometry.coordinates[0], honey_bees, wild_bees)), stadsdelen[0].properties.Buurtcombinatie)
@@ -210,8 +211,8 @@ var piemargin = {
   },
 
   // sixes for the pie chart
-  piewidth = 500,
-  pieheight = 700,
+  piewidth = 400,
+  pieheight = 530,
   radius = Math.min(piewidth, pieheight) / 2;
 
 // make the svg for the pie chart
@@ -238,26 +239,28 @@ var arc = d3.arc()
   .innerRadius(0);
 
 // make all the texts for the legend of the pie chart
-piesvg.append("text").attr("x", -230).attr("y", -420).text("Buurt:").attr("class", "honeyLegend").attr("alignment-baseline", "middle")
-piesvg.append("circle").attr("cx", -220).attr("cy", -370).attr("class", "honeyLegend")
-piesvg.append("text").attr("x", -190).attr("y", -370).text("Honing bijen kolonies").attr("class", "honeyLegend").attr("alignment-baseline", "middle")
-piesvg.append("circle").attr("cx", -220).attr("cy", -315).attr("class", "wildLegend")
-piesvg.append("text").attr("x", -190).attr("y", -315).text("Waargenomen bijen soorten").attr("class", "wildLegend").attr("alignment-baseline", "middle")
-piesvg.append("text").attr("x", -250).attr("y", 275).text("Verhouding tussen aantal honingbij volken en waargenomen wilde bijen").attr("class", "label").attr("alignment-baseline", "middle")
+piesvg.append("text").attr("x", -180).attr("y", -320).text("Buurt:").attr("class", "honeyLegend").attr("alignment-baseline", "middle")
+piesvg.append("circle").attr("cx", -180).attr("cy", -270).attr("class", "honeyLegend")
+piesvg.append("text").attr("x", -150).attr("y", -270).text("Honing bijen kolonies").attr("class", "honeyLegend").attr("alignment-baseline", "middle")
+piesvg.append("circle").attr("cx", -180).attr("cy", -215).attr("class", "wildLegend")
+piesvg.append("text").attr("x", -150).attr("y", -215).text("Waargenomen bijen soorten").attr("class", "wildLegend").attr("alignment-baseline", "middle")
+piesvg.append("text").attr("x", -200).attr("y", 210).text("Verhouding tussen aantal honingbij volken en waargenomen wilde bijen").attr("class", "label").attr("alignment-baseline", "middle")
+
+
 // make updateable textboxes for the pie chart
-text = piesvg.append("text")
-  .attr("x", -160)
-  .attr("y", -412.5)
+buurt = piesvg.append("text")
+  .attr("x", -100)
+  .attr("y", -315)
   .attr("class", "honeyLegend");
 
 honeyAmount = piesvg.append("text")
-  .attr("x", 110)
-  .attr("y", -362.5)
+  .attr("x", 150)
+  .attr("y", -262.5)
   .attr("class", "honeyLegend");
 
 wildAmount = piesvg.append("text")
-  .attr("x", 110)
-  .attr("y", -310)
+  .attr("x", 150)
+  .attr("y", -210)
   .attr("class", "honeyLegend");
 
   piesvg.append("g")
@@ -385,7 +388,7 @@ function showInfo(d) {
 
 // update pie chart
 function redraw(data, buurtnaam) {
-  text.text(buurtnaam)
+  buurt.text(buurtnaam)
 
   honeyAmount.data(data)
     .text(data[0].value)
