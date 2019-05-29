@@ -116,13 +116,15 @@ h1 {
 
 .box {
   border-radius: 20px;
-  border: 2px solid #f4e242;
+  border: 2px solid black;
+  background-color: #f4e242;
   padding: 20px;
   width: 720px;
   height: 175px;
   position: absolute;
   top: 110px;
   left: 1025px;
+  opacity: 0.25;
 }
 
 .text_box {

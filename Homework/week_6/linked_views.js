@@ -149,9 +149,14 @@ function ready(error, buurten, mokum, wild_bees, honey_bees) {
       return stadsdeel[a.properties.Stadsdeel_code] !== stadsdeel[b.properties.Stadsdeel_code];
     })));
 
+  svg.append("text")
+  .attr("x", 0)
+  .attr("y", 700)
+  .text("Kaart van Amsterdam, bron:https://maps.amsterdam.nl/open_geodata/").attr("class", "label").attr("alignment-baseline", "middle")
   // draw the first pie chart and make the first scatter of bee points
   redraw(makeData(inside(stadsdelen[0].geometry.coordinates[0], honey_bees, wild_bees)), stadsdelen[0].properties.Buurtcombinatie)
   scatterPoints("all")
+
 
   // this function scatters the points around the map according to the choice of the dropdown menu
   function scatterPoints(option) {
@@ -238,7 +243,7 @@ piesvg.append("circle").attr("cx", -220).attr("cy", -370).attr("class", "honeyLe
 piesvg.append("text").attr("x", -190).attr("y", -370).text("Honing bijen kolonies").attr("class", "honeyLegend").attr("alignment-baseline", "middle")
 piesvg.append("circle").attr("cx", -220).attr("cy", -315).attr("class", "wildLegend")
 piesvg.append("text").attr("x", -190).attr("y", -315).text("Waargenomen bijen soorten").attr("class", "wildLegend").attr("alignment-baseline", "middle")
-
+piesvg.append("text").attr("x", -250).attr("y", 275).text("Verhouding tussen aantal honingbij volken en waargenomen wilde bijen").attr("class", "label").attr("alignment-baseline", "middle")
 // make updateable textboxes for the pie chart
 text = piesvg.append("text")
   .attr("x", -160)
@@ -254,6 +259,10 @@ wildAmount = piesvg.append("text")
   .attr("x", 110)
   .attr("y", -310)
   .attr("class", "honeyLegend");
+
+  piesvg.append("g")
+  	.attr("class", "lines");
+
 
 
 
@@ -406,8 +415,7 @@ function redraw(data, buurtnaam) {
     .each(function(d) {
       this._current = d;
     });
-
-}
+};
 
 // Store the displayed angles in _current.
 // Then, interpolate from _current to the new angles.
