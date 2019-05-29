@@ -93,6 +93,7 @@ function ready(error, buurten, mokum, wild_bees, honey_bees) {
       scatterPoints(this.value)
   };
 
+
   if (error) throw error;
 
   // make data ready for usage
