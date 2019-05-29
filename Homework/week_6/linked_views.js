@@ -2,10 +2,10 @@
 d3.select("head").append("title").text("BEES");
 d3.select("body").append("h3").text("Mels van Eck 12505757");
 d3.select("body").append("text").attr("class", "text_box").text("Deze map laat zien op welke locatie er bijen volken leven in Amsterdam," +
-    " zowel wilde bijen als honingbijen zijn er te zien." +
-    "Klik op een buurt om de verhoudingen tussen honing en wilde bijen te zien," +
-    " klik op de gekleurde puntjes op de kaart om te zien hoeveel kolonies honingbijen er leven op deze plek " +
-    'of welke soorten er zijn waargenomen.');
+  " zowel wilde bijen als honingbijen zijn er te zien." +
+  "Klik op een buurt om de verhoudingen tussen honing en wilde bijen te zien," +
+  " klik op de gekleurde puntjes op de kaart om te zien hoeveel kolonies honingbijen er leven op deze plek " +
+  'of welke soorten er zijn waargenomen.');
 
 // text boxes
 d3.select("body").append("text")
@@ -87,14 +87,14 @@ function ready(error, buurten, mokum, wild_bees, honey_bees) {
 
   // onchange function for dot selection on the map
   document.getElementById("myList").onchange = function() {
-    if( this.value == "special"){
-           window.open(this.options[this.selectedIndex].value)
-      };
-      scatterPoints(this.value)
+    if (this.value == "special") {
+      window.open(this.options[this.selectedIndex].value)
+    };
+    scatterPoints(this.value)
   };
 
 
-  if (error) throw error;
+if (error) throw error;
 
   // make data ready for usage
   var stadsdelen = topojson.feature(buurten, buurten.objects.buurten).features;
@@ -152,13 +152,12 @@ function ready(error, buurten, mokum, wild_bees, honey_bees) {
     })));
 
   svg.append("text")
-  .attr("x", 0)
-  .attr("y", 575)
-  .text("Kaart van Amsterdam, bron:https://maps.amsterdam.nl/open_geodata/").attr("class", "label").attr("alignment-baseline", "middle")
+    .attr("x", 0)
+    .attr("y", 575)
+    .text("Kaart van Amsterdam, bron:https://maps.amsterdam.nl/open_geodata/").attr("class", "label").attr("alignment-baseline", "middle")
   // draw the first pie chart and make the first scatter of bee points
   redraw(makeData(inside(stadsdelen[0].geometry.coordinates[0], honey_bees, wild_bees)), stadsdelen[0].properties.Buurtcombinatie)
   scatterPoints("all")
-
 
   // this function scatters the points around the map according to the choice of the dropdown menu
   function scatterPoints(option) {
@@ -264,8 +263,8 @@ wildAmount = piesvg.append("text")
   .attr("y", -210)
   .attr("class", "honeyLegend");
 
-  piesvg.append("g")
-  	.attr("class", "lines");
+piesvg.append("g")
+  .attr("class", "lines");
 
 
 
