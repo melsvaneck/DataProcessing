@@ -87,7 +87,7 @@ function ready(error, buurten, mokum, wild_bees, honey_bees) {
 
   // onchange function for dot selection on the map
   document.getElementById("myList").onchange = function() {
-    if (this.value == "special") {
+    if (this.value == "https://www.youtube.com/watch?v=dQw4w9WgXcQ") {
       window.open(this.options[this.selectedIndex].value)
     };
     scatterPoints(this.value)
